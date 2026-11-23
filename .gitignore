@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Uploads & Temporary files
+uploads/
+temp/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE Files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Existing isolated submodules/tools
+gemini-web2api/
+
+# Screenshot verification artifacts (not source)
+screenshots/
+screenshot.png
+*.tmp-chrome/
+
+# Chrome headless temp profile
+.tmp-chrome/
+.chrome-headless/
+
+# Database Backups & Dumps
+backups/
+*.dump
+*.sql.gpg
+*.tar.gz
+
+
+.vercel
+.env*

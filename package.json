@@ -1,0 +1,28 @@
+{
+  "name": "questforge-ai",
+  "version": "1.0.0",
+  "description": "AI-Powered Scholarship Application Readiness and Document Verification Platform",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue,green\" \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "build": "npm --prefix client run build",
+    "start": "npm --prefix server start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "keywords": [
+    "scholarship",
+    "document-verification",
+    "ocr",
+    "audit-engine",
+    "gemini-ai",
+    "react",
+    "express"
+  ],
+  "author": "QuestForge Team",
+  "license": "ISC"
+}

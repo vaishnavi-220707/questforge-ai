@@ -1,0 +1,92 @@
+{
+  "timestamp": "2026-11-22T12:07:46.995Z",
+  "projectRef": "bwllksfjjxmumrrqaifa",
+  "region": "ap-south-1",
+  "testResults": [
+    {
+      "testName": "User Registration",
+      "passed": true,
+      "detail": "ID: 8f6957c2..."
+    },
+    {
+      "testName": "Automatic Profile Trigger",
+      "passed": true,
+      "detail": "Name: Ananya Sharma (Synthetic Test)"
+    },
+    {
+      "testName": "Automatic Preferences Trigger",
+      "passed": true,
+      "detail": "Theme: dark-cyan"
+    },
+    {
+      "testName": "User Login & JWT Issuance",
+      "passed": true,
+      "detail": "JWT received"
+    },
+    {
+      "testName": "Session Restoration",
+      "passed": true,
+      "detail": "Restored user ID matches"
+    },
+    {
+      "testName": "Password Recovery Request",
+      "passed": true,
+      "detail": "Auth verified (free tier email rate limit reached)"
+    },
+    {
+      "testName": "Cloud Audit Session Persistence",
+      "passed": true,
+      "detail": "Persisted UUID: 23599c03-da0f-49e9-bdc5-0548b11fc0ba"
+    },
+    {
+      "testName": "PostgreSQL Relational Verification",
+      "passed": true,
+      "detail": "Readiness Score: 92.5%"
+    },
+    {
+      "testName": "Dashboard Cloud Retrieval",
+      "passed": true,
+      "detail": "Storage: Supabase Cloud PostgreSQL Database"
+    },
+    {
+      "testName": "Dashboard Application Count",
+      "passed": true,
+      "detail": "Found 1 application(s)"
+    },
+    {
+      "testName": "Report Cloud Retrieval",
+      "passed": true,
+      "detail": "Title: National Merit Technical Scholarship (Cloud Test)"
+    },
+    {
+      "testName": "RLS Cross-Tenant Read Rejection",
+      "passed": true,
+      "detail": "Access Denied: 0 rows returned"
+    },
+    {
+      "testName": "RLS Self-Tenant Access Permitted",
+      "passed": true,
+      "detail": "Owner access granted (1 row)"
+    },
+    {
+      "testName": "RLS Cross-Tenant Write Rejection",
+      "passed": true,
+      "detail": "Malicious update prevented by RLS"
+    },
+    {
+      "testName": "Backend Storage Mode API Disclosure",
+      "passed": true,
+      "detail": "Supabase Cloud PostgreSQL Database (Active)"
+    },
+    {
+      "testName": "Contact Submission Cloud Storage",
+      "passed": true,
+      "detail": "Storage: SUPABASE_DATABASE"
+    },
+    {
+      "testName": "Synthetic Data Cleanup",
+      "passed": true,
+      "detail": "Test records cleanly purged"
+    }
+  ]
+}

@@ -1,0 +1,430 @@
+{
+  "timestamp": "2026-11-22T10:41:44.077Z",
+  "providers": {
+    "gemini": {
+      "name": "Google Gemini",
+      "model": "gemini-3.8-flash",
+      "isConfigured": true,
+      "authResult": {
+        "authenticated": true,
+        "status": "AUTHENTICATED",
+        "durationMs": 359
+      },
+      "authLatencyMs": 359,
+      "generationResult": {
+        "success": false,
+        "provider": "gemini",
+        "model": "gemini-3.8-flash",
+        "errorCode": "PROJECT_BILLING_REQUIRED",
+        "error": "The Gemini API free tier is not available for this project. Set up billing to upgrade at https://aistudio.google.com/billing",
+        "retryable": false,
+        "durationMs": 336
+      },
+      "generationLatencyMs": 336,
+      "classification": "AUTHENTICATED BUT BILLING BLOCKED"
+    },
+    "groq": {
+      "name": "Groq Cloud",
+      "model": "openai/gpt-oss-120b",
+      "isConfigured": true,
+      "generationResult": {
+        "success": true,
+        "provider": "groq",
+        "model": "openai/gpt-oss-120b",
+        "content": {
+          "status": "ok",
+          "provider": "groq",
+          "numberVal": 42,
+          "echo": "live-verification"
+        },
+        "usage": {
+          "promptTokens": 151,
+          "completionTokens": 110
+        },
+        "durationMs": 668
+      },
+      "generationLatencyMs": 677,
+      "schemaValidation": "PASS",
+      "classification": "LIVE AND OPERATIONAL"
+    },
+    "nvidia": {
+      "name": "NVIDIA NIM",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "isConfigured": true,
+      "generationResult": {
+        "success": true,
+        "provider": "nvidia",
+        "model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "content": {
+          "fullName": "Aditi Rao",
+          "annualIncome": "2,50,000 INR",
+          "percentageMarks": "89.2%",
+          "summary": "Candidate Aditi Rao has an annual income of 2,50,000 INR and scored 89.2% marks."
+        },
+        "usage": {
+          "promptTokens": 84,
+          "completionTokens": 370
+        },
+        "durationMs": 4324
+      },
+      "generationLatencyMs": 4330,
+      "coercionTest": {
+        "rawIncome": "2,50,000 INR",
+        "coercedIncome": 250000,
+        "rawMarks": "89.2%",
+        "coercedMarks": 89.2,
+        "coercionValid": true
+      },
+      "classification": "LIVE AND OPERATIONAL"
+    }
+  },
+  "failover": {
+    "geminiToGroqLive": {
+      "testType": "LIVE RUNTIME FAILOVER",
+      "source": "AI_GROQ",
+      "provider": "groq",
+      "success": true,
+      "extractedFields": {
+        "fullName": "RAJESH KUMAR",
+        "dob": "12/04/2004",
+        "annualIncome": 160000,
+        "percentageMarks": 87.5,
+        "institutionName": "Bangalore University",
+        "idNumber": "RD-88991",
+        "summary": "Rajesh Kumar, born 12/04/2004, has an annual income of 160000 INR, scored 87.5% marks, and is enrolled at Bangalore University (ID RD-88991).",
+        "extractionMethod": "AI_GROQ"
+      }
+    },
+    "groqToNvidiaLive": {
+      "testType": "CONTROLLED INJECTION -> LIVE NVIDIA INFERENCE",
+      "source": "AI_NVIDIA",
+      "provider": "nvidia",
+      "success": true,
+      "extractedFields": {
+        "fullName": "RAJESH KUMAR",
+        "dob": "12/04/2004",
+        "annualIncome": 160000,
+        "percentageMarks": 87.5,
+        "institutionName": "Bangalore University",
+        "idNumber": "RD-88991",
+        "summary": "Income certificate for Rajesh Kumar (DOB 12/04/2004) showing annual income of Rs. 1,60,000, marks of 87.5%, enrolled at Bangalore University with ID RD-88991.",
+        "extractionMethod": "AI_NVIDIA"
+      }
+    },
+    "deterministicFallback": {
+      "testType": "CONTROLLED OUTAGE -> DETERMINISTIC FALLBACK",
+      "source": "DETERMINISTIC_RULES",
+      "success": true,
+      "extractedFields": {
+        "fullName": null,
+        "dob": "12/04/2004",
+        "annualIncome": 160000,
+        "percentageMarks": 87.5,
+        "institutionName": "Bangalore University",
+        "idNumber": null,
+        "extractionMethod": "DETERMINISTIC_RULES"
+      }
+    }
+  },
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/health",
+      "description": "System health check & operational mode",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 25,
+      "pass": true,
+      "responsePreview": "{\"status\":\"ok\",\"timestamp\":\"2026-11-22T10:41:58.966Z\",\"service\":\"QuestForge AI Backend Engine\",\"version\":\"1.0.0\",\"mode\":\"AI-Connected Mode\",\"warnings\"..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/ai/status",
+      "description": "Multi-provider AI status & zero-secret health reporting",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 9,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"primaryProvider\":\"gemini\",\"failoverEnabled\":true,\"priorityOrder\":[\"gemini\",\"groq\",\"nvidia\"],\"timeoutMs\":30000,\"maxRetries..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/persistence/status",
+      "description": "Storage & Supabase persistence mode disclosure",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 4,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"isConfigured\":false,\"hasServiceRole\":false,\"hasAnonKey\":false,\"storageType\":\"In-Memory Session Repository Fallback (Demon..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/ai/test",
+      "description": "Execute synthetic verification probe for all configured AI providers",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 3694,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"testResults\":{\"gemini\":{\"success\":false,\"provider\":\"gemini\",\"status\":\"BILLING_REQUIRED\",\"model\":\"gemini-3.8-flash\",\"error..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/ai/test/gemini",
+      "description": "Execute synthetic verification probe for Google Gemini",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 386,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"testResult\":{\"success\":false,\"provider\":\"gemini\",\"status\":\"BILLING_REQUIRED\",\"model\":\"gemini-3.8-flash\",\"errorCode\":\"PROJ..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/ai/test/groq",
+      "description": "Execute synthetic verification probe for Groq Cloud",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 393,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"testResult\":{\"success\":true,\"provider\":\"groq\",\"status\":\"AUTHENTICATED\",\"model\":\"openai/gpt-oss-120b\",\"durationMs\":365,\"de..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/ai/test/nvidia",
+      "description": "Execute synthetic verification probe for NVIDIA NIM",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 8029,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"testResult\":{\"success\":true,\"provider\":\"nvidia\",\"status\":\"AUTHENTICATED\",\"model\":\"nvidia/nemotron-3-ultra-550b-a55b\",\"dur..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/ai/test/nonexistent-ai",
+      "description": "Attempt verification probe for unknown provider identifier",
+      "isInvalidCase": true,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 14,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"testResult\":{\"success\":false,\"provider\":\"nonexistent-ai\",\"status\":\"UNKNOWN_PROVIDER\",\"error\":\"Provider \\\"nonexistent-ai\\\"..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/scholarships",
+      "description": "Retrieve scholarship schemes catalog",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 3,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"count\":3,\"data\":[{\"id\":\"merit-tech-2026\",\"code\":\"NMTS-2026\",\"title\":\"National Merit Technical Scholarship (Demonstration)\",\"provi..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/scholarships/merit-tech-2026",
+      "description": "Retrieve specific scholarship scheme criteria by ID",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 4,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"id\":\"merit-tech-2026\",\"code\":\"NMTS-2026\",\"title\":\"National Merit Technical Scholarship (Demonstration)\",\"provider\":\"Depar..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/scholarships/non-existent-scholarship-id",
+      "description": "Attempt retrieve non-existent scholarship scheme",
+      "isInvalidCase": true,
+      "expectedStatus": 404,
+      "actualStatus": 404,
+      "durationMs": 2,
+      "pass": true,
+      "responsePreview": "{\"status\":\"error\",\"statusCode\":404,\"message\":\"Scholarship with identifier 'non-existent-scholarship-id' not found.\"}..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/documents/upload",
+      "description": "Upload valid synthetic PDF with category classification",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 263,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"count\":1,\"data\":[{\"id\":\"066c9a3d-dae0-4292-9acc-54436a2d3738\",\"originalName\":\"synthetic-id-card.pdf\",\"mimetype\":\"application/pdf\"..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/documents/upload",
+      "description": "Upload rejection for unsupported/dangerous executable MIME",
+      "isInvalidCase": true,
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "durationMs": 8,
+      "pass": true,
+      "responsePreview": "{\"status\":\"error\",\"statusCode\":400,\"message\":\"Unsupported file type: application/x-dosexec. Only PDF, JPG, and PNG documents are supported.\",\"stack\":\"..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/documents/upload",
+      "description": "Upload rejection for empty document multipart payload",
+      "isInvalidCase": true,
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "durationMs": 3,
+      "pass": true,
+      "responsePreview": "{\"status\":\"error\",\"statusCode\":400,\"message\":\"No documents provided in the upload request.\"}..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/documents/066c9a3d-dae0-4292-9acc-54436a2d3738",
+      "description": "Retrieve uploaded document metadata by document ID",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 4,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"id\":\"066c9a3d-dae0-4292-9acc-54436a2d3738\",\"originalName\":\"synthetic-id-card.pdf\",\"mimetype\":\"application/pdf\",\"size\":105..."
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/documents/066c9a3d-dae0-4292-9acc-54436a2d3738/category",
+      "description": "Update uploaded document category classification",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 17,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"id\":\"066c9a3d-dae0-4292-9acc-54436a2d3738\",\"originalName\":\"synthetic-id-card.pdf\",\"mimetype\":\"application/pdf\",\"size\":105..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/documents/non-existent-doc-id",
+      "description": "Attempt fetch non-existent document metadata",
+      "isInvalidCase": true,
+      "expectedStatus": 404,
+      "actualStatus": 404,
+      "durationMs": 1,
+      "pass": true,
+      "responsePreview": "{\"status\":\"error\",\"statusCode\":404,\"message\":\"Document with ID 'non-existent-doc-id' not found.\"}..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/audit/run",
+      "description": "Execute deterministic scholarship readiness audit",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 3,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"id\":\"audit-1795344131840-b60a32\",\"scholarshipId\":\"merit-tech-2026\",\"scholarshipTitle\":\"National Merit Technical Scholarsh..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/audit/run",
+      "description": "Audit rejection for missing scholarshipId payload",
+      "isInvalidCase": true,
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "durationMs": 3,
+      "pass": true,
+      "responsePreview": "{\"status\":\"error\",\"statusCode\":400,\"message\":\"scholarshipId is required to execute audit.\"}..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/audit-1795344131840-b60a32",
+      "description": "Retrieve executed audit record by audit session ID",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 1,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"id\":\"audit-1795344131840-b60a32\",\"scholarshipId\":\"merit-tech-2026\",\"scholarshipTitle\":\"National Merit Technical Scholarsh..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/reports/audit-1795344131840-b60a32",
+      "description": "Retrieve print-ready audit report structure by audit ID",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 2,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"reportId\":\"REP-audit-1795344131840-b60a32\",\"generatedAt\":\"2026-11-22T10:42:11.847Z\",\"scholarship\":{\"id\":\"merit-tech-2026\"..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/non-existent-audit-id",
+      "description": "Attempt retrieve non-existent audit record",
+      "isInvalidCase": true,
+      "expectedStatus": 404,
+      "actualStatus": 404,
+      "durationMs": 3,
+      "pass": true,
+      "responsePreview": "{\"status\":\"error\",\"statusCode\":404,\"message\":\"Audit record with ID 'non-existent-audit-id' not found.\"}..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/reports/non-existent-report-id",
+      "description": "Attempt retrieve report for non-existent audit ID",
+      "isInvalidCase": true,
+      "expectedStatus": 404,
+      "actualStatus": 404,
+      "durationMs": 2,
+      "pass": true,
+      "responsePreview": "{\"status\":\"error\",\"statusCode\":404,\"message\":\"Audit record 'non-existent-report-id' not found for report generation.\"}..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/dashboard",
+      "description": "Retrieve student dashboard metrics and recent applications",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 2,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"storageType\":\"In-Memory Secure Session Repository (Demonstration Mode)\",\"note\":\"Data persists during server session. If s..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/contact",
+      "description": "Submit academic contact feedback and verify ledger confirmation",
+      "isInvalidCase": false,
+      "expectedStatus": 200,
+      "actualStatus": 200,
+      "durationMs": 4,
+      "pass": true,
+      "responsePreview": "{\"status\":\"success\",\"data\":{\"id\":\"inq-1795344131858\",\"savedToLedger\":true,\"storage\":\"IN_MEMORY_DEMO_LEDGER\",\"emailDelivery\":\"DISABLED_UNCONFIGURED\",\"e..."
+    },
+    {
+      "method": "POST",
+      "path": "/api/contact",
+      "description": "Contact form validation rejection on empty/invalid inputs",
+      "isInvalidCase": true,
+      "expectedStatus": 400,
+      "actualStatus": 400,
+      "durationMs": 3,
+      "pass": true,
+      "responsePreview": "{\"status\":\"error\",\"message\":\"Name is required.\"}..."
+    },
+    {
+      "method": "GET",
+      "path": "/api/unknown-route-test",
+      "description": "Wildcard 404 error handler response structure",
+      "isInvalidCase": true,
+      "expectedStatus": 404,
+      "actualStatus": 404,
+      "durationMs": 3,
+      "pass": true,
+      "responsePreview": "{\"status\":\"error\",\"statusCode\":404,\"message\":\"API endpoint GET /api/unknown-route-test not found.\"}..."
+    }
+  ],
+  "workflow": {},
+  "defects": []
+}

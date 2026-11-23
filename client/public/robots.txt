@@ -1,0 +1,4 @@
+# QuestForge AI — Academic Demonstration & Staging Robots Policy
+# Disallow all indexing to prevent staging/demo URLs from appearing in search results
+User-agent: *
+Disallow: /
